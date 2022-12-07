@@ -1,9 +1,11 @@
+let title = document.getElementById("title");
 let num = document.getElementById("ecran_num");
 let result = document.getElementById("ecran_result");
 
 let numbers = document.getElementsByClassName("numbers");
 let egale = document.getElementById("egale");
 let ac = document.getElementById("reset");
+let on = document.getElementById("on");
 
 let op = document.getElementsByClassName("op");
 let plus = document.getElementById("plus");
@@ -11,75 +13,78 @@ let fois = document.getElementById("fois");
 let moins = document.getElementById("moins");
 let diviser = document.getElementById("diviser");
 
+let interv = true;
 
-ac.addEventListener("click", () => {
-    num.innerText = "";
-    result.innerText = "";
-});
+on.addEventListener("click", () => {
+    let temps = setInterval(() => {
+        if (interv) {
+            title.classList.remove("hidden");
+            title.classList.add("visible");
+            interv = false;
+        } else {
+            title.classList.remove("visible");
+            title.classList.add("hidden");
+            interv = true;
+        }
+    }, 700);
 
+    setInterval(() => {
+        clearInterval(temps);
+        title.classList.remove("visible");
+        title.classList.add("hidden");
+    }, 3000);
 
-let t = [];
-let y = 0;
-
-for (let i = 0; i < numbers.length; i++) {
-    numbers[i].addEventListener("click", () => {
-        num.innerText += numbers[i].textContent;
-        t[y] = parseInt(numbers[i].textContent);
-        console.log(t);
+    ac.addEventListener("click", () => {
+        num.innerText = "";
+        result.innerText = "";
     });
-}
 
-function operations (signes) {
-    let resultat = 0;
-    for (let k = 0; k < t.length; k++) {
-        // if (signes == "+") {
-        //     resultat += t[k];
-        // }
-        resultat += t[k];
-
-        // if (signes == "-") {
-        //     resultat -= t[k];
-        // }
-
-        // if (signes == "*") {
-        //     resultat *= t[k];
-        // }
-
-        // if (signes == "/") {
-        //     resultat /= t[k];
-        // }
+    let text = "";
+    
+    let t = [];
+    let k = 0;
+    let m = k;
+    for (let i = 0; i < numbers.length; i++) {
+        numbers[i].addEventListener("click", () => {
+            num.innerText += numbers[i].textContent;
+            text += numbers[i].textContent;
+            t[k] = parseInt(text);
+        });
     }
-    return resultat;
-}
+    
+    for (let j = 0; j < op.length; j++) {
+        op[j].addEventListener("click", () => {
+            text = "";
+            num.innerText += op[j].textContent;
+            k ++;
+            t[k ++] = op[j].textContent;
+        });
+    }
 
-plus.addEventListener("click", () => {
-    operations("+");
-});
+    let resultat;
+    let calcule;
+    egale.addEventListener("click", () => {
+    
+        for (let y = 0; y < t.length; y++) {
+            if (t[y] == "+") {
+                resultat = t[y + 1] = t[y - 1] + t[y + 1];
+            }
 
-moins.addEventListener("click", () => {
-    operations("-");
-});
+            if (t[y] == "*") {
+                console.log(t[y - 1] * t[y + 1]);
+                resultat = t[y + 1] = t[y - 1] * t[y + 1];
+            }
 
-fois.addEventListener("click", () => {
-    operations("*");
-});
+            if (t[y] == "/") {
+                resultat = t[y + 1] = t[y - 1] / t[y + 1];
+            }
 
-diviser.addEventListener("click", () => {
-    operations("/");
-});
-
-
-
-egale.addEventListener("click", () => {
-    result.innerText += operations();
-    console.log(operations());
-});
-
-for (let j = 0; j < op.length; j++) {
-    op[j].addEventListener("click", () => {
-        num.innerText += op[j].textContent;
-        y ++;
+            if (t[y] == "-") {
+                resultat = t[y + 1] = t[y - 1] - t[y + 1];
+            }
+        }
+        console.log(t);
+        result.innerText = resultat;
     });
-}
 
-console.log("tableau " + t);
+});

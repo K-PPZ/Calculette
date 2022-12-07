@@ -56,4 +56,22 @@ button {
     background-color: #3E5055;
     color: white;
     border: none;
+    margin: 2px;
+}
+
+button:hover {
+    background-color: #445b61;
+}
+
+#title {
+    font-size: 50px;
+    text-align: center;
+}
+
+.hidden {
+    display: none;
+}
+
+.visible {
+    display: block;
 }
